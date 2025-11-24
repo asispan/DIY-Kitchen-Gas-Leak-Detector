@@ -304,8 +304,6 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 
 <div align="center">
 
-**Built with ❤️ on Raspberry Pi**
-
-*Created: September 2024 | Version 1.0*
+*Created by Asis Panda on September 2025 | Version 1.0*
 
 </div>
