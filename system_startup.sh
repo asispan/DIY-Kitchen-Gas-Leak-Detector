@@ -32,15 +32,15 @@ fi
 
 # 2. Check Bluetooth connection to Echo Dot
 log_msg "Checking Echo Dot connection..."
-if bluetoothctl info FC:49:2D:4C:13:81 | grep -q "Connected: yes"; then
+if bluetoothctl info FF:49:2D:XC:13:81 | grep -q "Connected: yes"; then
     log_msg "✅ Echo Dot is connected"
     announce "Bluetooth audio connected"
 else
     log_msg "⚠️  Echo Dot not connected - attempting reconnection..."
-    bluetoothctl connect FC:49:2D:4C:13:81
+    bluetoothctl connect FF:49:2D:XC:13:81
     sleep 3
     
-    if bluetoothctl info FC:49:2D:4C:13:81 | grep -q "Connected: yes"; then
+    if bluetoothctl info FF:49:2D:XC:13:81 | grep -q "Connected: yes"; then
         log_msg "✅ Echo Dot reconnected successfully"
         announce "Bluetooth audio reconnected"
     else
@@ -106,7 +106,7 @@ fi
 # 8. Final system health summary
 log_msg "=== STARTUP HEALTH SUMMARY ==="
 
-BLUETOOTH_OK=$(bluetoothctl info FC:49:2D:4C:13:81 2>/dev/null | grep -q "Connected: yes" && echo "✅" || echo "❌")
+BLUETOOTH_OK=$(bluetoothctl info FF:49:2D:XC:13:81 2>/dev/null | grep -q "Connected: yes" && echo "✅" || echo "❌")
 SSH_OK=$(systemctl is-active --quiet ssh && echo "✅" || echo "❌") 
 GAS_SERVICE_OK=$(systemctl is-active --quiet gas-sensor-monitor && echo "✅" || echo "❌")
 WEB_OK=$(curl -s http://localhost:5000/api/status >/dev/null 2>&1 && echo "✅" || echo "❌")
