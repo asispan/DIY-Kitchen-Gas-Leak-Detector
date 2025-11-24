@@ -4,13 +4,13 @@
 
 **AI-Powered Gas Detection System with ElevenLabs Voice Alerts**
 
+[![ElevenLabs](https://img.shields.io/badge/ElevenLabs-AI%20Voice-6B4FBB)](https://elevenlabs.io/)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-Zero%202W-C51A4A?logo=raspberry-pi&logoColor=white)](https://www.raspberrypi.org/)
 [![Flask](https://img.shields.io/badge/Flask-2.0+-000000?logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
-[![ElevenLabs](https://img.shields.io/badge/ElevenLabs-AI%20Voice-6B4FBB)](https://elevenlabs.io/)
 
-*A sophisticated gas leak detection system featuring airplane-style AI voice alerts, real-time monitoring, and live camera streaming*
+*An intelligent gas leak detection system featuring airplane-style AI voice readouts, real-time monitoring, and live camera streaming*
 
 [Features](#-features) • [Hardware](#-hardware-requirements) • [Installation](#-installation) • [Usage](#-usage) • [API](#-api-endpoints)
 
