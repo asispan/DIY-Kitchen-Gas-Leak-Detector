@@ -1,0 +1,45 @@
+# Sensitive files
+*.env
+.env
+*.pem
+*.key
+*_key.json
+secrets.json
+credentials.json
+config_local.json
+
+# Logs
+*.log
+logs/
+__pycache__/
+*.pyc
+*.pyo
+
+# Backup files
+*.backup
+*.backup2
+*.bak
+*_backup_*.py
+
+# System files
+.DS_Store
+.bash_history
+bluetooth_device.txt
+
+# Camera test images
+test_*.jpg
+debug_*.jpg
+
+# Python virtual environments
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Local configuration
+bluetooth_config.json

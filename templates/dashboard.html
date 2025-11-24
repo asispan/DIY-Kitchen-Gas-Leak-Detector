@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gas Sensor Monitor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f0f0f0; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .status { padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .safe { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .alert { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .info { background: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; }
+        .btn { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin: 5px; }
+        .btn:hover { background: #0056b3; }
+        #camera-feed { max-width: 100%; height: auto; border-radius: 5px; border: 2px solid #007bff; }
+        .health-status { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 20px 0; }
+        .health-item { text-align: center; padding: 10px; border-radius: 5px; background: #e9ecef; }
+        .healthy { background: #d4edda !important; }
+        .unhealthy { background: #f8d7da !important; }
+        .camera-container { text-align: center; margin: 15px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Enhanced Gas Sensor Monitor</h1>
+        
+        <div id="gas-status" class="status safe">
+            <h2>✅ Air Quality: Normal</h2>
+            <p>Gas sensor is monitoring. System is operational.</p>
+        </div>
+        
+        <div class="health-status">
+            <div class="health-item healthy">
+                <strong>🔵 Bluetooth</strong><br>Connected
+            </div>
+            <div class="health-item healthy">
+                <strong>🔐 SSH</strong><br>Active
+            </div>
+            <div class="health-item healthy">
+                <strong>🌐 Web Service</strong><br>Running
+            </div>
+            <div class="health-item healthy">
+                <strong>🎵 Voice Alerts</strong><br>Enabled
+            </div>
+        </div>
+        
+        <div class="status info">
+            <h3>🎥 Live Camera Stream</h3>
+            <p id="camera-status">Initializing camera...</p>
+            <div class="camera-container">
+                <img id="camera-feed" style="display:none;" alt="Pi Camera Live Stream">
+                <p id="camera-error" style="display:none; color: #721c24; font-style: italic;">Camera not available</p>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin: 20px 0;">
+            <button class="btn" onclick="testVoice()">🔊 Test Voice Alert</button>
+            <button class="btn" onclick="checkHealth()">🔍 Health Check</button>
+            <button class="btn" onclick="refreshStatus()">🔄 Refresh Status</button>
+            <button class="btn" onclick="loadCameraFeed()">📸 Refresh Camera</button>
+        </div>
+        
+        <div class="status info">
+            <h3>📊 System Info</h3>
+            <p><strong>Device:</strong> Raspberry Pi Zero 2W</p>
+            <p><strong>Sensor:</strong> MQ-135 Gas Sensor (GPIO17)</p>
+            <p><strong>Camera:</strong> Pi Camera Module v1 (OV5647)</p>
+            <p><strong>Audio:</strong> Hindi Voice Alerts via Bluetooth</p>
+            <p><strong>Access:</strong> SSH Enabled, Web Dashboard Active</p>
+        </div>
+    </div>
+    
+    <script>
+        async function refreshStatus() {
+            try {
+                const response = await fetch('/api/status');
+                const data = await response.json();
+                
+                const gasStatus = document.getElementById('gas-status');
+                if (data.gas_detected) {
+                    gasStatus.className = 'status alert';
+                    gasStatus.innerHTML = '<h2>⚠️ GAS DETECTED!</h2><p>Air quality is poor. Take precautions!</p>';
+                } else {
+                    gasStatus.className = 'status safe';  
+                    gasStatus.innerHTML = '<h2>✅ Air Quality: Normal</h2><p>Gas sensor is monitoring. System is operational.</p>';
+                }
+                
+                // Update camera status
+                const cameraStatus = document.getElementById('camera-status');
+                if (data.camera_available) {
+                    cameraStatus.textContent = '✅ Pi Camera active and streaming (refreshes every 3 seconds)';
+                    cameraStatus.style.color = '#155724';
+                } else {
+                    cameraStatus.textContent = '❌ Pi Camera not available';
+                    cameraStatus.style.color = '#721c24';
+                }
+                
+            } catch (error) {
+                console.error('Status update failed:', error);
+            }
+        }
+        
+        async function testVoice() {
+            try {
+                const response = await fetch('/api/test-voice');
+                const data = await response.json();
+                alert('Voice test initiated! Listen for the test message.');
+            } catch (error) {
+                alert('Voice test failed: ' + error.message);
+            }
+        }
+        
+        async function checkHealth() {
+            try {
+                const response = await fetch('/api/health-check');
+                const data = await response.json();
+                
+                let status = 'System Health Check:\\n\\n';
+                status += `Bluetooth: ${data.bluetooth ? '✅' : '❌'}\\n`;
+                status += `SSH: ${data.ssh ? '✅' : '❌'}\\n`;
+                status += `Web Service: ${data.web ? '✅' : '❌'}\\n`;
+                status += `Overall: ${data.overall ? '✅ Healthy' : '❌ Issues detected'}`;
+                
+                alert(status);
+            } catch (error) {
+                alert('Health check failed: ' + error.message);
+            }
+        }
+        
+        async function loadCameraFeed() {
+            try {
+                const response = await fetch('/api/camera-feed', { 
+                    cache: 'no-store',
+                    headers: {
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
+                    }
+                });
+                const data = await response.json();
+                
+                const feedImg = document.getElementById('camera-feed');
+                const errorMsg = document.getElementById('camera-error');
+                
+                if (data.available && data.frame) {
+                    feedImg.src = data.frame;
+                    feedImg.style.display = 'block';
+                    errorMsg.style.display = 'none';
+                    console.log('Camera frame updated:', new Date().toLocaleTimeString());
+                } else {
+                    feedImg.style.display = 'none';
+                    errorMsg.style.display = 'block';
+                    errorMsg.textContent = 'Camera not available or no frame captured';
+                }
+            } catch (error) {
+                console.error('Camera feed failed:', error);
+                document.getElementById('camera-feed').style.display = 'none';
+                const errorMsg = document.getElementById('camera-error');
+                errorMsg.style.display = 'block';
+                errorMsg.textContent = 'Failed to load camera feed: ' + error.message;
+            }
+        }
+        
+        // Auto-refresh every 3 seconds
+        setInterval(() => { 
+            refreshStatus(); 
+            loadCameraFeed(); 
+        }, 3000);
+        
+        // Initial load
+        refreshStatus();
+        loadCameraFeed();
+    </script>
+</body>
+</html>
