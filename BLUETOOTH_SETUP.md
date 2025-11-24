@@ -25,7 +25,7 @@ sudo systemctl start gas-sensor-monitor.service
 
 1. **Bluetooth connects automatically** to your configured device
 2. **Gas sensor monitor starts** with audio alerts enabled
-3. **Web interface becomes available** at http://<your-ip>:5000
+3. **Web interface becomes available** at http://your-ip:5000
 
 ## Audio Alerts
 
@@ -43,7 +43,7 @@ When gas clears:
 ## Testing Audio
 
 Test your audio setup:
-1. Visit: http://<your-ip>:5000/api/test-audio
+1. Visit: http://your-ip:5000/api/test-audio
 2. You should hear a warning beep through your Bluetooth device
 
 ## Manual Commands
